@@ -1,27 +1,39 @@
 
+export interface RawOpponentEntry {
+    opponent: {
+        id: number
+        name: string
+        location: string
+        acronym: string
+        image_url: string
+    }
+}
+
+
 export interface Match {
-    Name: string,
-    Id: number,
-    Date: string,
-    BeginAt: string,
-    Opponents: OpponentEntry[],
-    League: League,
+    name: string,
+    id: number,
+    date: string,
+    beginAt: string,
+    opponents: OpponentEntry[],
+    league: League,
 }
 
 export interface League {
-    Id: number,
-    Name: string,
-    ImageURL: string,
+    id: number,
+    name: string,
+    image_url: string,
+    slug: string
 }
 
 export interface OpponentEntry {
-    Opponent: Team,
+    opponent: Team,
 }
 
 export interface Team {
-    Id: number,
-    Name: string,
-    Location: string,
-    Acronym: string,
-    ImageURL: string,
+    id: number,
+    name: string,
+    location: string,
+    acronym: string,
+    imageURL: string,
 }

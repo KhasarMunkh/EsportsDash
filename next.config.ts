@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    remotePatterns: [new URL('https://cdn.pandascore.co/images/**')],
 };
 
 export default nextConfig;
