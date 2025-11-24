@@ -1,5 +1,28 @@
 import { NextResponse } from "next/server";
 
+interface PandaScoreTeam {
+    id: number
+    name: string
+    acronym?: string
+    image_url?: string
+}
+
+interface PandaScorePlayer {
+    id: number
+    name: string
+    first_name?: string
+    last_name?: string
+    image_url?: string
+    role?: string
+    hometown?: string
+    current_team?: {
+        id: number
+        name: string
+        acronym?: string
+        image_url?: string
+    }
+}
+
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -62,27 +85,27 @@ export async function GET(request: Request) {
                 );
 
                 if (res.ok) {
-                    const teams = await res.json();
+                    const teams = await res.json() as PandaScoreTeam[];
 
                     // Filter out academy/challenger/junior teams
-                    const mainTeams = teams.filter((team: any) => {
+                    const mainTeams = teams.filter((team) => {
                         const teamName = team.name?.toLowerCase() || '';
                         // Exclude teams with any of the excluded terms
                         return !excludeTerms.some(term => teamName.includes(term));
                     });
 
-                    let selectedTeam = null;
+                    let selectedTeam: PandaScoreTeam | null = null;
 
                     if (exactMatch) {
                         // For exact match, find the team with the exact name
-                        selectedTeam = mainTeams.find((team: any) =>
+                        selectedTeam = mainTeams.find((team) =>
                             team.name?.toLowerCase() === name.toLowerCase()
-                        );
+                        ) || null;
                     } else {
                         // For non-exact, prefer shorter names (main rosters usually have shorter names)
-                        selectedTeam = mainTeams.sort((a: any, b: any) =>
+                        selectedTeam = mainTeams.sort((a, b) =>
                             (a.name?.length || 999) - (b.name?.length || 999)
-                        )[0];
+                        )[0] || null;
                     }
 
                     if (!selectedTeam && mainTeams.length > 0) {
@@ -135,8 +158,8 @@ export async function GET(request: Request) {
         const teamPlayersArrays = await Promise.all(teamPlayerPromises);
 
         // Flatten and deduplicate by player ID
-        const playerMap = new Map();
-        teamPlayersArrays.flat().forEach((player: any) => {
+        const playerMap = new Map<number, PandaScorePlayer>();
+        teamPlayersArrays.flat().forEach((player) => {
             if (player.id) {
                 playerMap.set(player.id, player);
             }

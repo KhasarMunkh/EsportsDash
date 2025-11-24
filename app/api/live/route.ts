@@ -1,6 +1,39 @@
 import { NextResponse } from "next/server";
 import type { Match } from "../../lib/types";
 
+interface PandaScorePlayer {
+    id: number
+    name: string
+    first_name: string
+    last_name: string
+    image_url: string
+    role: string
+}
+
+interface PandaScoreOpponent {
+    opponent?: {
+        id: number
+        name: string
+        location: string
+        acronym: string
+        image_url: string
+    }
+}
+
+interface PandaScoreMatch {
+    name: string
+    id: number
+    scheduled_at: string
+    begin_at: string
+    opponents?: PandaScoreOpponent[]
+    league: {
+        id: number
+        name: string
+        image_url: string
+        slug?: string
+    }
+}
+
 export async function GET() {
     try {
         const res = await fetch("https://api.pandascore.co/lol/matches/running", {
@@ -15,12 +48,12 @@ export async function GET() {
             throw new Error(`PandaScore API error: ${res.status}`);
         }
 
-        const matchesData = await res.json();
+        const matchesData = await res.json() as PandaScoreMatch[];
 
         // Extract all unique team IDs
         const teamIds = new Set<number>()
-        matchesData.forEach((match: any) => {
-            match.opponents?.forEach((opp: any) => {
+        matchesData.forEach((match) => {
+            match.opponents?.forEach((opp) => {
                 if (opp.opponent?.id) {
                     teamIds.add(opp.opponent.id)
                 }
@@ -28,7 +61,7 @@ export async function GET() {
         })
 
         // Fetch players for each team
-        const teamPlayersMap = new Map<number, any[]>()
+        const teamPlayersMap = new Map<number, PandaScorePlayer[]>()
 
         await Promise.all(
             Array.from(teamIds).map(async (teamId) => {
@@ -43,7 +76,7 @@ export async function GET() {
                     })
 
                     if (playersRes.ok) {
-                        const players = await playersRes.json()
+                        const players = await playersRes.json() as PandaScorePlayer[]
                         teamPlayersMap.set(teamId, players || [])
                     } else {
                         teamPlayersMap.set(teamId, [])
@@ -56,24 +89,23 @@ export async function GET() {
         )
 
         // Map matches with player data
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const matches: Match[] = matchesData.map((m: any) => ({
+        const matches: Match[] = matchesData.map((m) => ({
             name: m.name,
             id: m.id,
             scheduled_at: m.scheduled_at,
             begin_at: m.begin_at,
-            opponents: m.opponents?.map((opp: any) => {
-                const teamId = opp.opponent?.id
+            opponents: m.opponents?.map((opp) => {
+                const teamId = opp.opponent?.id || 0
                 const players = teamPlayersMap.get(teamId) || []
 
                 return {
                     opponent: {
-                        id: opp.opponent?.id,
-                        name: opp.opponent?.name,
-                        location: opp.opponent?.location,
-                        acronym: opp.opponent?.acronym,
-                        image_url: opp.opponent?.image_url,
-                        players: players.map((p: any) => ({
+                        id: opp.opponent?.id || 0,
+                        name: opp.opponent?.name || '',
+                        location: opp.opponent?.location || '',
+                        acronym: opp.opponent?.acronym || '',
+                        image_url: opp.opponent?.image_url || '',
+                        players: players.map((p) => ({
                             id: p.id,
                             name: p.name,
                             first_name: p.first_name,
@@ -84,7 +116,10 @@ export async function GET() {
                     }
                 }
             }) || [],
-            league: m.league,
+            league: {
+                ...m.league,
+                slug: m.league.slug || '',
+            },
         }));
 
         return NextResponse.json(matches);
