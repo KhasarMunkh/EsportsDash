@@ -2,6 +2,10 @@
 
 A modern esports dashboard for League of Legends built with Next.js 15, featuring real-time match tracking, tournament information, and player statistics powered by the PandaScore API.
 
+## Check it out here:
+
+**[View Live Site →](https://esportsdash.app)**
+
 ## Features
 
 - **Live Matches**: Track ongoing League of Legends matches in real-time
