@@ -6,7 +6,14 @@ import useSWR from "swr";
 import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to fetch data');
+    }
+    return res.json();
+};
 
 function LoadingSkeleton() {
     return (
@@ -98,7 +105,7 @@ function MatchesContent() {
                         </div>
                     </div>
                 )}
-                {filteredMatches && filteredMatches.map((match: Match) => (
+                {filteredMatches && Array.isArray(filteredMatches) && filteredMatches.map((match: Match) => (
                     <MatchCard key={match.id} match={match} />
                 ))}
             </div>

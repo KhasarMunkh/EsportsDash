@@ -5,7 +5,14 @@ import useSWR from "swr";
 import Image from "next/image";
 import { UserCircleIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to fetch data');
+    }
+    return res.json();
+};
 
 interface Player {
     id: number;
@@ -221,7 +228,7 @@ export default function PlayersPage() {
                     </div>
                 )}
 
-                {filteredPlayers && filteredPlayers.length > 0 && (
+                {filteredPlayers && Array.isArray(filteredPlayers) && filteredPlayers.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {filteredPlayers.map((player) => (
                             <PlayerCard key={player.id} player={player} />

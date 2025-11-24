@@ -3,7 +3,14 @@
 import useSWR from "swr";
 import Image from "next/image";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to fetch data');
+    }
+    return res.json();
+};
 
 interface Tournament {
     id: number;
@@ -131,7 +138,7 @@ export default function TournamentsPage() {
                     </div>
                 )}
 
-                {data && data.length > 0 && (
+                {data && Array.isArray(data) && data.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {data.map((tournament) => (
                             <TournamentCard key={tournament.id} tournament={tournament} />
