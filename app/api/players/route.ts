@@ -172,8 +172,9 @@ export async function GET(request: Request) {
         return NextResponse.json(popularPlayers);
     } catch (error) {
         console.error("Error fetching players:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to fetch players"
         return NextResponse.json(
-            { error: "Failed to fetch players" },
+            { error: errorMessage, details: String(error) },
             { status: 500 }
         );
     }

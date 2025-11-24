@@ -125,8 +125,9 @@ export async function GET() {
         return NextResponse.json(matches);
     } catch (error) {
         console.error("Error fetching live matches:", error);
+        const errorMessage = error instanceof Error ? error.message : "Failed to fetch live matches"
         return NextResponse.json(
-            { error: "Failed to fetch live matches" },
+            { error: errorMessage, details: String(error) },
             { status: 500 }
         );
     }
