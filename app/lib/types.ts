@@ -13,8 +13,8 @@ export interface RawOpponentEntry {
 export interface Match {
     name: string,
     id: number,
-    date: string,
-    beginAt: string,
+    scheduled_at: string,
+    begin_at: string,
     opponents: OpponentEntry[],
     league: League,
 }
@@ -30,10 +30,24 @@ export interface OpponentEntry {
     opponent: Team,
 }
 
+export interface Player {
+    id: number,
+    name: string,
+    first_name: string,
+    last_name: string,
+    image_url: string,
+    role: string,
+    active?: boolean,
+    age?: number,
+    birthday?: string,
+    slug?: string,
+}
+
 export interface Team {
     id: number,
     name: string,
     location: string,
     acronym: string,
-    imageURL: string,
+    image_url: string,
+    players?: Player[],
 }

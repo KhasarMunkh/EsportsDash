@@ -1,0 +1,139 @@
+[
+    {
+        "winner": null,
+        "detailed_stats": true,
+        "winner_type": "Team",
+        "begin_at": "2025-12-06T06:00:00Z",
+        "serie_id": 9898,
+        "videogame_version": null,
+        "scheduled_at": "2025-12-06T06:00:00Z",
+        "games": [
+            {
+                "complete": false,
+                "id": 273314,
+                "position": 1,
+                "status": "not_started",
+                "length": null,
+                "finished": false,
+                "begin_at": null,
+                "detailed_stats": true,
+                "end_at": null,
+                "forfeit": false,
+                "match_id": 1269900,
+                "winner": {
+                    "id": null,
+                    "type": "Team"
+                },
+                "winner_type": "Team"
+            }
+        ],
+        "match_type": "best_of",
+        "forfeit": false,
+        "videogame": {
+            "id": 1,
+            "name": "LoL",
+            "slug": "league-of-legends"
+        },
+        "end_at": null,
+        "draw": false,
+        "status": "not_started",
+        "videogame_title": null,
+        "serie": {
+            "id": 9898,
+            "name": "",
+            "year": 2025,
+            "begin_at": "2025-12-06T06:00:00Z",
+            "end_at": "2025-12-14T18:00:00Z",
+            "winner_id": null,
+            "winner_type": "Team",
+            "slug": "league-of-legends-kespa-cup-2025",
+            "modified_at": "2025-11-22T08:33:26Z",
+            "league_id": 2711,
+            "season": null,
+            "full_name": "2025"
+        },
+        "rescheduled": false,
+        "results": [
+            {
+                "team_id": 1097,
+                "score": 0
+            },
+            {
+                "team_id": 2882,
+                "score": 0
+            }
+        ],
+        "tournament_id": 18094,
+        "league": {
+            "id": 2711,
+            "name": "KeSPA Cup",
+            "url": null,
+            "slug": "league-of-legends-kespa-cup",
+            "modified_at": "2020-02-18T12:15:13Z",
+            "image_url": "https://cdn.pandascore.co/images/league/image/2711/220px-2019_KeSPA_Cup.png"
+        },
+        "slug": "cloud9-vs-gen-g-2025-12-06",
+        "number_of_games": 1,
+        "modified_at": "2025-11-22T08:33:26Z",
+        "game_advantage": null,
+        "winner_id": null,
+        "streams_list": [],
+        "id": 1269900,
+        "name": "C9 vs GEN",
+        "tournament": {
+            "id": 18094,
+            "name": "Group A",
+            "type": "online/offline",
+            "country": "KR",
+            "begin_at": "2025-12-06T06:00:00Z",
+            "detailed_stats": true,
+            "end_at": "2025-12-08T09:15:00Z",
+            "winner_id": null,
+            "winner_type": "Team",
+            "slug": "league-of-legends-kespa-cup-2025-group-a",
+            "modified_at": "2025-11-22T08:33:26Z",
+            "league_id": 2711,
+            "serie_id": 9898,
+            "has_bracket": false,
+            "prizepool": null,
+            "region": "ASIA",
+            "tier": "c",
+            "live_supported": false
+        },
+        "league_id": 2711,
+        "original_scheduled_at": "2025-12-06T06:00:00Z",
+        "live": {
+            "supported": false,
+            "url": null,
+            "opens_at": null
+        },
+        "opponents": [
+            {
+                "type": "Team",
+                "opponent": {
+                    "id": 1097,
+                    "name": "Cloud9",
+                    "location": "US",
+                    "slug": "cloud9",
+                    "modified_at": "2025-11-22T08:57:30Z",
+                    "acronym": "C9",
+                    "image_url": "https://cdn.pandascore.co/images/team/image/1097/cloud9-gnd9b0gn.png",
+                    "dark_mode_image_url": null
+                }
+            },
+            {
+                "type": "Team",
+                "opponent": {
+                    "id": 2882,
+                    "name": "Gen.G",
+                    "location": "KR",
+                    "slug": "geng",
+                    "modified_at": "2025-11-19T11:43:52Z",
+                    "acronym": "GEN",
+                    "image_url": "https://cdn.pandascore.co/images/team/image/2882/500px_gen.g_esports_2019_full_lightmode.png",
+                    "dark_mode_image_url": "https://cdn.pandascore.co/dark_images/team/dark_image/2882/499px_gen.g_esports_2019_full_darkmode.png"
+                }
+            }
+        ]
+    },
+]

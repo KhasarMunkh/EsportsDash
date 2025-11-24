@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    remotePatterns: [new URL('https://cdn.pandascore.co/images/**')],
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'cdn.pandascore.co',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;

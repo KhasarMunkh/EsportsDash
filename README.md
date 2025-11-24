@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EsportsDash
+
+A modern esports dashboard for League of Legends built with Next.js 15, featuring real-time match tracking, tournament information, and player statistics powered by the PandaScore API.
+
+## Features
+
+- **Live Matches**: Track ongoing League of Legends matches in real-time
+- **Upcoming Matches**: View scheduled matches with team information and league details
+- **Tournaments**: Browse current and upcoming tournaments
+- **Players**: Explore professional player profiles and statistics
+- **Search**: Find matches, teams, and players quickly
+- **Dark Theme**: Beautiful dark mode design optimized for viewing
+
+# To run locally:
+## Prerequisites
+
+- Node.js 18+ installed
+- A PandaScore API key (get one at [pandascore.co](https://pandascore.co/))
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
+
+2. **Install dependencies**:
+
+```bash
+npm install
+```
+
+3. **Set up environment variables**:
+
+Create a `.env` file in the root directory and add your PandaScore API key:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and replace `your_pandascore_api_key_here` with your actual API key:
+
+```
+PANDA_KEY=your_actual_api_key_here
+```
+
+4. **Run the development server**:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. **Open your browser** and navigate to [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create a production build locally:
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/app` - Next.js app directory with pages and API routes
+  - `/api` - Backend API routes that proxy to PandaScore
+  - `/components` - Reusable React components
+  - `/lib` - TypeScript types and utilities
+  - `/matches` - Matches page
+  - `/tournaments` - Tournaments page
+  - `/players` - Players page
+  - `/live` - Live matches page
+- `/public` - Static assets
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **UI Components**: Headless UI
+- **Data Fetching**: SWR
+- **API**: PandaScore REST API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Rate Limits
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+PandaScore free tier has rate limits. The app caches responses to minimize API calls:
+- Matches: 5 minutes
+- Tournaments: 10 minutes
+- Players: 1 hour
+- Live matches: No cache (real-time data)
+
+## License
+
+This project is open source and available under the MIT License.
