@@ -1,12 +1,5 @@
 import { NextResponse } from "next/server";
 
-interface PandaScoreTeam {
-    id: number
-    name: string
-    acronym?: string
-    image_url?: string
-}
-
 interface PandaScorePlayer {
     id: number
     name: string
@@ -47,86 +40,21 @@ export async function GET(request: Request) {
             return NextResponse.json(data);
         }
 
-        // Known popular team IDs (hardcoded to avoid wrong teams like T1.A)
-        const knownTeamIds = [
+        // Hardcoded team IDs for popular teams
+        const teamIds = [
+            126061, // T1
+            390,    // Team Liquid
+            88,     // G2 Esports
+            2883,   // Hanwha Life Esports
+            318,    // JD Gaming
+            1566,   // Bilibili Gaming
+            129972, // Weibo Gaming
+            126059, // Top Esports
+            126058, // LNG Esports
             2882,   // Gen.G
             1097,   // Cloud9
-            126,    // Fnatic (from earlier logs, had 1 player)
+            126,    // Fnatic
         ];
-
-        // Common terms that indicate non-main rosters
-        const excludeTerms = ['academy', 'challenger', 'challengers', 'junior', 'first', 'second', '.a', '.b', 'youth'];
-
-        // Teams to search for (to get current IDs)
-        const teamsToSearch = [
-            { name: 'T1', exactMatch: true },
-            { name: 'Team Liquid', exactMatch: false },
-            { name: 'G2 Esports', exactMatch: true },
-            { name: 'Hanwha Life Esports', exactMatch: false },
-            { name: 'JD Gaming', exactMatch: false },
-            { name: 'Bilibili Gaming', exactMatch: false },
-            { name: 'Weibo Gaming', exactMatch: false },
-            { name: 'Top Esports', exactMatch: false },
-            { name: 'LNG Esports', exactMatch: false },
-        ];
-
-        // Search for team IDs
-        const searchedIdPromises = teamsToSearch.map(async ({ name, exactMatch }) => {
-            try {
-                const res = await fetch(
-                    `https://api.pandascore.co/lol/teams?search[name]=${encodeURIComponent(name)}&per_page=10`,
-                    {
-                        headers: {
-                            Accept: "application/json",
-                            Authorization: `Bearer ${process.env.PANDA_KEY}`,
-                        },
-                        next: { revalidate: 86400 }, // Cache for 24 hours
-                    }
-                );
-
-                if (res.ok) {
-                    const teams = await res.json() as PandaScoreTeam[];
-
-                    // Filter out academy/challenger/junior teams
-                    const mainTeams = teams.filter((team) => {
-                        const teamName = team.name?.toLowerCase() || '';
-                        // Exclude teams with any of the excluded terms
-                        return !excludeTerms.some(term => teamName.includes(term));
-                    });
-
-                    let selectedTeam: PandaScoreTeam | null = null;
-
-                    if (exactMatch) {
-                        // For exact match, find the team with the exact name
-                        selectedTeam = mainTeams.find((team) =>
-                            team.name?.toLowerCase() === name.toLowerCase()
-                        ) || null;
-                    } else {
-                        // For non-exact, prefer shorter names (main rosters usually have shorter names)
-                        selectedTeam = mainTeams.sort((a, b) =>
-                            (a.name?.length || 999) - (b.name?.length || 999)
-                        )[0] || null;
-                    }
-
-                    if (!selectedTeam && mainTeams.length > 0) {
-                        selectedTeam = mainTeams[0];
-                    }
-
-                    if (selectedTeam) {
-                        console.log(`Found team "${name}": ID ${selectedTeam.id} (${selectedTeam.name})`);
-                        return selectedTeam.id;
-                    }
-                }
-                console.log(`Could not find team "${name}"`);
-                return null;
-            } catch (error) {
-                console.error(`Error searching for team ${name}:`, error);
-                return null;
-            }
-        });
-
-        const searchedIds = (await Promise.all(searchedIdPromises)).filter((id): id is number => id !== null);
-        const teamIds = [...new Set([...knownTeamIds, ...searchedIds])];
 
         // Fetch players from these teams
         const teamPlayerPromises = teamIds.map(async (teamId) => {
@@ -143,11 +71,8 @@ export async function GET(request: Request) {
                 );
 
                 if (res.ok) {
-                    const players = await res.json();
-                    console.log(`Team ${teamId}: ${players.length} players`);
-                    return players;
+                    return await res.json();
                 }
-                console.log(`Team ${teamId}: failed with status ${res.status}`);
                 return [];
             } catch (error) {
                 console.error(`Error fetching players for team ${teamId}:`, error);
@@ -166,8 +91,6 @@ export async function GET(request: Request) {
         });
 
         const popularPlayers = Array.from(playerMap.values());
-
-        console.log(`Fetched ${popularPlayers.length} popular players from ${teamIds.length} teams`);
 
         return NextResponse.json(popularPlayers);
     } catch (error) {
