@@ -194,7 +194,7 @@ export default function PlayersPage() {
                         </div>
                         {searchQuery.length >= 2 && (
                             <p className="mt-2 text-xs text-gray-500">
-                                Showing instant results. {isTyping || isSearching ? 'Searching all players...' : 'Search complete.'}
+                                {isTyping || isSearching ? 'Searching all players...' : 'Search complete.'}
                             </p>
                         )}
                     </div>
